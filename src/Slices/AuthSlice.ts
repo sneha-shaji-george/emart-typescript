@@ -4,7 +4,7 @@ import { authLogin, authProfile, logoutSession , signup } from "../Utils/config"
 
 export const login = createAsyncThunk(
   "login/postRequestThunk",
-  async (payload) => await postData(`${authLogin}`, payload)
+  async (payload ) => await postData(`${authLogin}`, payload)
 );
 
 export const signUp = createAsyncThunk(
@@ -83,7 +83,7 @@ const initialState = {
   isLoggedIn: false,
   profileChecking: false,
   inSession: false
-};
+} as LoginState;
 
 const authSlice = createSlice({
   name: "auth",
@@ -93,30 +93,30 @@ const authSlice = createSlice({
       state.inSession = false;
     }
   },
-  extraReducers: {
-    [login.fulfilled]: (state, { payload }) => {
-      state.userInfo = payload.response;
+  extraReducers:(builder)=> {
+    builder.addCase(login.fulfilled, (state, action) => {
+      state.userInfo = action.payload.response;
       state.isLoggedIn = true;
       state.inSession = true;
-    },
-    [fetchUserProfile.fulfilled]: (state, { payload }) => {
-      state.profile = payload.payload.user;
+    }),
+    builder.addCase(fetchUserProfile.fulfilled, (state, action) => {
+      state.profile = action.payload.payload.user;
       state.isLoggedIn = true;
       state.profileChecking = false;
       state.inSession = true;
-    },
-    [fetchUserProfile.pending]: (state, { payload }) => {
+    }),
+    builder.addCase(fetchUserProfile.pending, (state, action) => {
       state.profileChecking = true;
       state.inSession = true;
-    },
-    [fetchUserProfile.rejected]: (state, { payload }) => {
+    }),
+    builder.addCase(fetchUserProfile.rejected, (state, action) => {
       state.isLoggedIn = false;
       state.inSession = false;
-    },
-    [logout.fulfilled]: (state, { payload }) => {
+    }),
+    builder.addCase(logout.rejected, (state, action) => {
       state.isLoggedIn = false;
       state.inSession = false;
-    }
+    })
   },
 });
 

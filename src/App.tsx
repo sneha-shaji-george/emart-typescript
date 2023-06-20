@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from 'react';
 import { RouterProvider } from "react-router-dom";
+import { fetchUserProfile } from "./Slices/AuthSlice";
 
 function App() {
   const userInfo = useSelector((state) => state.user.userInfo);
@@ -9,7 +10,7 @@ function App() {
 
   const Profile = async () => {
     if (!(window.location.href === "http://localhost:3000/login" || window.location.href === "http://localhost:3000" || window.location.href === "http://localhost:3000/signup")) {
-      const response = await dispatch(fetchUserProfile());
+      const response = dispatch(fetchUserProfile());
       dispatch(addUser(response.payload.payload));
     }
   }

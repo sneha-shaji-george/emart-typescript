@@ -1,4 +1,5 @@
-export const onRequest = (config) => {
+import { AxiosRequestConfig } from "axios";
+export const onRequest = (config : AxiosRequestConfig) => {
     const request = {
       ...config,
       headers: {
@@ -11,5 +12,5 @@ export const onRequest = (config) => {
     return request;
   };
   
-  export const onRequestError = (error) => Promise.reject(error);
+  export const onRequestError = (error : any ) => Promise.reject(error);
   

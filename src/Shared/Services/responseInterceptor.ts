@@ -1,3 +1,4 @@
+import { AxiosError, AxiosResponse } from 'axios';
 const HTTP_STATUS = {
     SUCCESS_A: 201,
     SUCCESS_B: 200,
@@ -9,7 +10,7 @@ const HTTP_STATUS = {
 }
 
 
-export function onResponseError(error) {
+export function onResponseError(error : AxiosError) {
     if (error.response?.status === HTTP_STATUS.SERVER_ERROR) {
         return Promise.reject(error.response.data);
     }
@@ -24,7 +25,7 @@ export function onResponseError(error) {
     return Promise.reject(error.response.data);
 }
 
-export function onResponse(response) {
+export function onResponse(response : AxiosResponse) {
     if (response.status === HTTP_STATUS.SUCCESS_A || response.status === HTTP_STATUS.SUCCESS_B ) {
         return Promise.resolve(response.data);
     } else {

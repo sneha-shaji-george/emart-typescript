@@ -1,0 +1,14 @@
+export const white = "#fff";
+export const black = "#000";
+export const brown = "#a87048";
+export const rose = "#ede5de";
+export const grey = "#333";
+export const red = "#f1530d";
+export const lightGrey = "#9d9fa6";
+export const darkGrey = "#c9c0c0";
+export const darkbrown = "#9d4404";
+export const cream = "#fdf7f2";
+export const darkBrown = "#815130";
+export const lightCream = "#fff6f0";
+export const disabledClr = "#c5a28b";
+export const cardTitleClr = "#fef7f2";
