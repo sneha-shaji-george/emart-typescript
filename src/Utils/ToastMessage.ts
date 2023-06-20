@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
  * Display toast message
  * @param {string} message Text to display in toast
  */
-export default function ToastMessage( status, message, position, autoClose, hideProgressBar ) {
+export default function ToastMessage( status:string, message:string, position:any, autoClose:any, hideProgressBar:any ) {
     switch (status) {
         case "success":
             return toast.success(message, {

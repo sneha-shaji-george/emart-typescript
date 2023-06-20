@@ -1,6 +1,11 @@
 import { API } from '.';
 
-const requestHandler = (url, method, { data, params }) =>
+interface RequestHandler{
+    data : any
+    params: any
+}
+
+const requestHandler = (url:string, method:string, { data , params } : RequestHandler ) =>
     Promise.resolve(
         API.request({
             url,

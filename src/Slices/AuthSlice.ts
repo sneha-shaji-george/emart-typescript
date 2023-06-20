@@ -93,8 +93,8 @@ const authSlice = createSlice({
       state.inSession = false;
     }
   },
-  extraReducers:(builder)=> {
-    builder.addCase(login.fulfilled, (state, action) => {
+  extraReducers:(builder : any)=> {
+    builder.addCase(login.fulfilled, (state:any, action:Object) => {
       state.userInfo = action.payload.response;
       state.isLoggedIn = true;
       state.inSession = true;

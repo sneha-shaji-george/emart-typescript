@@ -1,6 +1,11 @@
 import { validationRegExps } from "./constants";
 
-export const passwordValidation = ({ password, page }) => {
+interface PassswordValidation {
+   password : string,
+   page : string
+}
+
+export const passwordValidation = ({ password, page } : PassswordValidation ) => {
    if (page === "signin") {
       if (!(validationRegExps.passwordValidationRegExp.test(password))) {
          return { validate: false, errorMsg: "*Invalid Passsword Format" }
@@ -31,28 +36,28 @@ export const passwordValidation = ({ password, page }) => {
     
 }
 
-export const emailValidation = (username) => {
+export const emailValidation = (username : string) => {
 
    return (validationRegExps.emailValidationRegExp.test(username))
 }
 
 
-export const nameValidation = (name) => {
+export const nameValidation = (name : string) => {
 
    return (validationRegExps.nameValidatorRegExp.test(name))
 }
 
-export const phoneValidation = (phone) => {
+export const phoneValidation = (phone : string) => {
 
    return (validationRegExps.phoneValidationRegExp.test(phone))
 }
 
-export const addressValidation = (address) => {
+export const addressValidation = (address : string) => {
 
    return (validationRegExps.addressRegexExp.test(address))
 }
 
-export const zipCodeValidation = (zipcode) => {
+export const zipCodeValidation = (zipcode : string) => {
    
    return (validationRegExps.zipCodeRegExp.test(zipcode))
 }
