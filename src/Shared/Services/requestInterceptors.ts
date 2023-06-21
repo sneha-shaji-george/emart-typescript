@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from "axios";
-export const onRequest = (config : AxiosRequestConfig) => {
+export const onRequest = (config : any) => {
     const request = {
       ...config,
       headers: {

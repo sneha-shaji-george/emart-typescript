@@ -22,13 +22,13 @@ export function onResponseError(error : AxiosError) {
         }          
         return Promise.reject(error.response.data);
     }
-    return Promise.reject(error.response.data);
+    return Promise.reject(error.response && error.response.data);
 }
 
 export function onResponse(response : AxiosResponse) {
     if (response.status === HTTP_STATUS.SUCCESS_A || response.status === HTTP_STATUS.SUCCESS_B ) {
         return Promise.resolve(response.data);
     } else {
-        return onResponseError(response);
+        return onResponseError(response.data);
     }
 }

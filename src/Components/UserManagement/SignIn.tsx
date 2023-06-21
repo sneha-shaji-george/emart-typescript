@@ -2,11 +2,10 @@ import "./Signin.css";
 import {passwordValidation,emailValidation,
 } from "../../Utils/passwordValidation";
 import { images } from "../../Utils/constants";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { Link, Navigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch , useSelector} from "react-redux";
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { ToastContainer } from "react-toastify";
 import { fetchUserProfile, login } from "../../Slices/AuthSlice";
 import { dataEncrypt } from "../../Utils/dataEncrypt";
@@ -26,47 +25,40 @@ import {
   Styledshow,
 } from "./style";
 import Button from "../Button/Button";
+import { useAppDispatch, useAppSelector } from "../../hooks/dispatchSelectorHooks";
 
 const SignIn = () => {
   const [passwordType, setPasswordType] = useState("password");
   const [redirect, setRedirect] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [formData, setFormData] = useState({ username: "", password: "" });
-  const profileCheckPending = useSelector((state) => state.user.profileChecking);
-  const notSession = useSelector((state) => state.user.inSession);
-  const dispatch = useDispatch();
-  let { enteredUsername, enteredPassword } = formData;
+  const profileCheckPending = useAppSelector((state) => state.user.profileChecking);
+  const notSession = useAppSelector((state) => state.user.inSession);
+  const dispatch = useAppDispatch();
+  let { username, password } = formData;
   
   /**
    * To show a toast message on session termination.
    * @param {string} name 
    * @param {string} type 
    */
-  const notify = (name, type) => {
+  const notify = (name : string, type : string) => {
     ToastMessage(type, `Session over.Sign in again!`, "top-center", 2000, false)
   }
  
+   interface TypeLoginData {
+    username : string,
+    password : string
+  }
 
-
-  /**
-   * Validates the email and password withrespect to the regular expression.
-   * @param {object} data
-   * @returns
-   */
-  const loginValidation = (data) => {
+  const loginValidation = (data : TypeLoginData) => {
     if (!emailValidation(data.username)) {
       return { validate: false, errorMsg: "*Invalid Email" };
     }
     return passwordValidation({ password: data.password, page: "signin" });
   };
 
-
-  /**
-   * Handles the validaton of the data inputed, through the loginValidation function where
-   *formData ia passed.
-   * @param {object} event
-   */
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event : FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let payload = { username: "", password: "" };
     let route = loginValidation(formData);
@@ -80,12 +72,7 @@ const SignIn = () => {
         setRedirect(route.validate)
       }
       else {
-        if (response.error.message == "Unauthorized") {
-          setErrorMsg("Password Invalid")
-        }
-        else {
-          setErrorMsg(response.error.message)
-        }
+          setErrorMsg("Invalid Email/Password")
       }
     }
     else {
@@ -97,14 +84,10 @@ const SignIn = () => {
    * useEffect hook.
    */
   useEffect(() => {
-     !notSession && notify(null, "info")
+     !notSession && notify("", "info")
   }, []);
 
-  /**
-   * Save the inputs from the user in the signin fields into the formData object.
-   * @param {object} event
-   */
-  function handleChange(event) {
+  function handleChange(event : ChangeEvent<HTMLInputElement>) {
     setErrorMsg("");
     setFormData({ ...formData, [event.target.name]: event.target.value });
   }
@@ -114,7 +97,7 @@ const SignIn = () => {
    * @param {object} event
    * @returns
    */
-  const togglePassword = (event) => {
+  const togglePassword: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
     if (passwordType === "password") {
       setPasswordType("text");
@@ -128,7 +111,7 @@ const SignIn = () => {
     <StyledContainerSignin>
       <ToastContainer />
       {redirect ? <Navigate to="/home" /> : null}
-      <StyledForm onSubmit={(e) => handleSubmit(e)}>
+      <StyledForm onSubmit={handleSubmit}>
         <StyledLogo alt="logo" src={`${images}/Logo.png`} />
         {errorMsg ? (
           <StyledErrorMsg>
@@ -141,9 +124,9 @@ const SignIn = () => {
           <StyledFormInput
             type="text"
             className="form-input"
-            value={enteredUsername}
+            value={username}
             name="username"
-            onChange={(e) => handleChange(e)}
+            onChange={handleChange}
             required
             autoComplete="off"
           />
@@ -155,9 +138,9 @@ const SignIn = () => {
           <StyledFormInput
             type={passwordType}
             className="form-input"
-            value={enteredPassword}
+            value={password}
             name="password"
-            onChange={(e) => handleChange(e)}
+            onChange={handleChange}
             required
             autoComplete="off"
           />
@@ -166,9 +149,9 @@ const SignIn = () => {
           </StyledFormLabel>
           <Styledshow onClick={togglePassword}>
             {passwordType === "password" ? (
-              <FontAwesomeIcon icon={faEyeSlash} />
+              <VisibilityOffIcon />
             ) : (
-              <FontAwesomeIcon icon={faEye} />
+              <VisibilityIcon />
             )}
           </Styledshow>
         </StyledInnerContainer>
@@ -176,11 +159,8 @@ const SignIn = () => {
           <Button
             title="SIGN IN"
             hover=" 0 10px 36px rgba(0, 0, 0, .25)"
-            width="35%"
             margin="20px auto"
             borderRadius="20px"
-            type="submit"
-            className="btn"
             variant="filled"
           />
         </StyledInnerContainer>

@@ -1,15 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { postData, getData } from "../Shared/Services";
+import { FormData } from "../Components/UserManagement/SignUp";
 import { authLogin, authProfile, logoutSession , signup } from "../Utils/config";
+
+interface LoginPayloadType {
+  username:string,  
+  password: string
+}
 
 export const login = createAsyncThunk(
   "login/postRequestThunk",
-  async (payload ) => await postData(`${authLogin}`, payload)
+  async (payload: LoginPayloadType  ) => await postData(`${authLogin}`, payload)
 );
 
 export const signUp = createAsyncThunk(
   "signUp/postRequestThunk",
-  async (payload) => await postData(`${signup}`, payload)
+  async (payload: FormData) => await postData(`${signup}`, payload)
 );
 
 export const fetchUserProfile = createAsyncThunk(
@@ -93,14 +99,15 @@ const authSlice = createSlice({
       state.inSession = false;
     }
   },
-  extraReducers:(builder : any)=> {
-    builder.addCase(login.fulfilled, (state:any, action:Object) => {
-      state.userInfo = action.payload.response;
+  extraReducers:(builder)=> {
+    // eslint-disable-next-line
+    builder.addCase(login.fulfilled, (state, action) => {
+      state.userInfo = action.payload.data;
       state.isLoggedIn = true;
       state.inSession = true;
     }),
     builder.addCase(fetchUserProfile.fulfilled, (state, action) => {
-      state.profile = action.payload.payload.user;
+      state.profile = action.payload.data;
       state.isLoggedIn = true;
       state.profileChecking = false;
       state.inSession = true;
